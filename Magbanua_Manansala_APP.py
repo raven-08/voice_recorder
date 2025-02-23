@@ -31,7 +31,6 @@ class VoiceRecorder:
         self.is_paused = False
         self.frames = []
         self.recording_finished_event.clear()
-
         def recordingFunc(seconds):
             self.stream = self.pa.open(
                 format=self.format,
@@ -40,11 +39,9 @@ class VoiceRecorder:
                 input=True,
                 frames_per_buffer=self.frames_per_buffer,
             )
-
             print("Recording started")
             second_tracking = 0
             second_count = 0
-
             try:
                 while self.is_recording and second_count < seconds:
                     if not self.is_paused:
@@ -90,7 +87,6 @@ class VoiceRecorder:
                 self.stream.stop_stream()
                 self.stream.close()
                 self.stream = None
-            # self.pa.terminate()
             print("Recording stopped")
 
     def saveRecording(self, filename="record.wav"):
@@ -131,4 +127,3 @@ class VoiceRecorder:
 
     def __del__(self):
         self.pa.terminate()
-        print("PyAudio terminated in destructor")

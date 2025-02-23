@@ -3,8 +3,10 @@ from CTkMessagebox import CTkMessagebox as mb
 from PIL import Image, ImageSequence
 from Magbanua_Manansala_APP import VoiceRecorder
 
+
 class VoiceRecorderGUI(ctk.CTkFrame):
     ctk.set_appearance_mode("light")
+
     def __init__(self, master):
         ctk.CTkFrame.__init__(self, master)
         self.parent = master
@@ -36,34 +38,27 @@ class VoiceRecorderGUI(ctk.CTkFrame):
         self.hero_frame.place(x=360, y=70)
 
         self.dark_icon = ctk.CTkImage(
-            light_image=Image.open("icons/moon.png"),
-            dark_image=Image.open("icons/moon_dark.png"),
+            light_image=Image.open("icons/moon.png"), dark_image=Image.open("icons/moon_dark.png"),
             size=(20, 20),
         )
         self.sun_icon = ctk.CTkImage(
-            light_image=Image.open("icons/sun.png"),
-            dark_image=Image.open("icons/sun_dark.png"),
+            light_image=Image.open("icons/sun.png"), dark_image=Image.open("icons/sun_dark.png"),
             size=(20, 20),
         )
-
         self.mic_icon = ctk.CTkImage(
+            light_image=Image.open("icons/mic_dark.png"), dark_image=Image.open("icons/mic.png"),
             size=(20, 20),
-            light_image=Image.open("icons/mic_dark.png"),
-            dark_image=Image.open("icons/mic.png"),
         )
         self.pause_icon = ctk.CTkImage(
-            light_image=Image.open("icons/pause.png"),
-            dark_image=Image.open("icons/pause_dark.png"),
+            light_image=Image.open("icons/pause.png"), dark_image=Image.open("icons/pause_dark.png"),
             size=(20, 20),
         )
         self.play_icon = ctk.CTkImage(
-            light_image=Image.open("icons/play.png"),
-            dark_image=Image.open("icons/play_dark.png"),
+            light_image=Image.open("icons/play.png"), dark_image=Image.open("icons/play_dark.png"),
             size=(20, 20),
         )
         self.stop_icon = ctk.CTkImage(
-            light_image=Image.open("icons/stop.png"),
-            dark_image=Image.open("icons/stop_dark.png"),
+            light_image=Image.open("icons/stop.png"), dark_image=Image.open("icons/stop_dark.png"),
             size=(20, 20),
         )
         self.save_icon = ctk.CTkImage(
@@ -72,12 +67,12 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             size=(20, 20),
         )
         self.plot_icon = ctk.CTkImage(
-            light_image=Image.open("icons/plot.png"),
-            dark_image=Image.open("icons/plot_dark.png"),
+            light_image=Image.open("icons/plot.png"), dark_image=Image.open("icons/plot_dark.png"),
             size=(20, 20),
         )
         self.logo_image = ctk.CTkImage(
-            light_image=Image.open("utils/logo.png"), size=(400, 350)
+            light_image=Image.open("utils/logo.png"),
+            size=(400, 350),
         )
         self.dark_button = ctk.CTkButton(
             self.frame,
@@ -92,11 +87,10 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             corner_radius=4,
             command=self.lightDarkMode,
         )
-
         self.start_button = ctk.CTkButton(
             self.frame,
             image=self.mic_icon,
-            text="Start",
+            text="Start ",
             compound="right",
             fg_color="#FF6505",
             hover_color="#FF8C42",
@@ -167,7 +161,6 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             state="disabled",
             command=self.plot_Recording,
         )
-
         self.current_frame = 0
         self.gif_running = False
         self.wave_gif = "utils/wave.gif"
@@ -176,7 +169,6 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             ctk.CTkImage(light_image=frame.convert("RGBA"), size=(400, 350))
             for frame in ImageSequence.Iterator(self.gif)
         ]
-
         self.plot_current_frame = 0
         self.plot_running = False
         self.plot_wave_gif = "utils/plot.gif"
@@ -185,7 +177,6 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             ctk.CTkImage(light_image=frame.convert("RGBA"), size=(400, 350))
             for frame in ImageSequence.Iterator(self.plot_gif)
         ]
-
         self.hero = ctk.CTkLabel(self.hero_frame, image=self.logo_image, text="")
         self.hero.pack()
         self.dark_button.place(relx=0.96, rely=0.05, anchor="ne")
@@ -197,6 +188,7 @@ class VoiceRecorderGUI(ctk.CTkFrame):
 
     def startRecording(self):
         self.recorder.startRecording()
+        mb(title="Start", message="Recording has started.")
         if not self.gif_running:
             self.plot_running = False
             self.gif_running = True
@@ -283,6 +275,7 @@ class VoiceRecorderGUI(ctk.CTkFrame):
                 self.plot_frames
             )
             self.after(100, self.animatePlot)
+
 
 root = ctk.CTk()
 root.columnconfigure(0, weight=1)
