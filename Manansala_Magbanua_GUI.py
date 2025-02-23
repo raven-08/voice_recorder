@@ -205,7 +205,7 @@ class VoiceRecorderGUI(ctk.CTkFrame):
         self.pause_button.configure(state="normal")
         self.stop_button.configure(state="normal")
         self.save_button.configure(state="normal")
-        self.plot_button.configure(state="normal")
+        self.plot_button.configure(state="disabled")
         self.start_button.configure(state="disabled")
 
     def pausePlayRecording(self):
@@ -244,8 +244,9 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             icon="check",
             option_1="Thanks",
         )
-        self.start_button.configure(state="normal")
-        self.pause_button.configure(state="normal")
+        self.plot_button.configure(state="normal")
+        self.stop_button.configure(state="disabled")
+        self.pause_button.configure(state="disabled")
         self.gif_running = False
 
     def plot_Recording(self):
@@ -255,6 +256,9 @@ class VoiceRecorderGUI(ctk.CTkFrame):
         self.plot_current_frame = 0
         self.animatePlot()
         self.recorder.plotRecording()
+        self.start_button.configure(state="normal")
+        self.pause_button.configure(state="normal")
+        self.stop_button.configure(state="normal")
 
     def lightDarkMode(self):
         if self.is_darked:
