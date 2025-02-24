@@ -2,6 +2,7 @@ import pyaudio
 import wave
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import time
 import threading
 
@@ -26,11 +27,12 @@ class VoiceRecorder:
         self.record_thread = None
         self.recording_finished_event = threading.Event()
 
-    def startRecording(self, seconds=8):
+    def startRecording(self, seconds=1000):
         self.is_recording = True
         self.is_paused = False
         self.frames = []
         self.recording_finished_event.clear()
+
         def recordingFunc(seconds):
             self.stream = self.pa.open(
                 format=self.format,
@@ -98,6 +100,28 @@ class VoiceRecorder:
         obj.setframerate(self.rate)
         obj.writeframes(b"".join(self.frames))
         obj.close()
+
+    def playRecording(self, filename="record.wav"):
+        def playbackThread():
+            try:
+                obj = wave.open(filename, 'rb')
+                stream = self.pa.open(
+                    format=self.pa.get_format_from_width(obj.getsampwidth()),
+                    channels=obj.getnchannels(),
+                    rate=obj.getframerate(),
+                    output=True
+                )
+                data = obj.readframes(self.frames_per_buffer)
+                while data:
+                    stream.write(data)
+                    data = obj.readframes(self.frames_per_buffer)
+                stream.stop_stream()
+                stream.close()
+                obj.close()
+            except Exception as e:
+                print(f"Playback error at {str(e)}")
+
+        threading.Thread(target=playbackThread, daemon=True).start()
 
     def plotRecording(self, filename="record.wav"):
         file = wave.open(filename, "rb")

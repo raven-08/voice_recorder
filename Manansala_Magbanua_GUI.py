@@ -53,8 +53,8 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             light_image=Image.open("icons/pause.png"), dark_image=Image.open("icons/pause_dark.png"),
             size=(20, 20),
         )
-        self.play_icon = ctk.CTkImage(
-            light_image=Image.open("icons/play.png"), dark_image=Image.open("icons/play_dark.png"),
+        self.resume_icon = ctk.CTkImage(
+            light_image=Image.open("icons/resume.png"), dark_image=Image.open("icons/resume_dark.png"),
             size=(20, 20),
         )
         self.stop_icon = ctk.CTkImage(
@@ -62,8 +62,12 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             size=(20, 20),
         )
         self.save_icon = ctk.CTkImage(
-            light_image=Image.open("icons/save.png"),
-            dark_image=Image.open("icons/save_dark.png"),
+            light_image=Image.open("icons/save.png"), dark_image=Image.open("icons/save_dark.png"),
+            size=(20, 20),
+        )
+        self.play_icon = ctk.CTkImage(
+            light_image=Image.open("icons/play.png"),
+            dark_image=Image.open("icons/play_dark.png"),
             size=(20, 20),
         )
         self.plot_icon = ctk.CTkImage(
@@ -146,6 +150,21 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             state="disabled",
             command=self.saveRecording,
         )
+        self.play_button = ctk.CTkButton(
+            self.frame,
+            image=self.play_icon,
+            text="Play",
+            compound="right",
+            fg_color="#FF6505",
+            hover_color="#FF8C42",
+            text_color="white",
+            font=(self.poppins, 14, "bold"),
+            height=40,
+            width=140,
+            corner_radius=4,
+            state="disabled",
+            command= self.playRecording,
+        )
         self.plot_button = ctk.CTkButton(
             self.frame,
             image=self.plot_icon,
@@ -184,7 +203,8 @@ class VoiceRecorderGUI(ctk.CTkFrame):
         self.pause_button.place(x=45, y=185, anchor="w")
         self.stop_button.place(x=45, y=255, anchor="w")
         self.save_button.place(x=45, y=325, anchor="w")
-        self.plot_button.place(x=45, y=395, anchor="w")
+        self.play_button.place(x=45, y=395, anchor="w")
+        self.plot_button.place(x=45, y=465, anchor="w")
 
     def startRecording(self):
         self.recorder.startRecording()
@@ -198,6 +218,7 @@ class VoiceRecorderGUI(ctk.CTkFrame):
         self.stop_button.configure(state="normal")
         self.save_button.configure(state="normal")
         self.plot_button.configure(state="disabled")
+        self.play_button.configure(state="disabled")
         self.start_button.configure(state="disabled")
 
     def pausePlayRecording(self):
@@ -210,7 +231,7 @@ class VoiceRecorderGUI(ctk.CTkFrame):
         else:
             self.recorder.pauseRecording()
             mb(title="Paused", message="Recording paused.")
-            self.pause_button.configure(text="Play", image=self.play_icon)
+            self.pause_button.configure(text="Resume", image=self.resume_icon)
             self.is_paused = True
 
     def stopRecording(self):
@@ -237,9 +258,16 @@ class VoiceRecorderGUI(ctk.CTkFrame):
             option_1="Thanks",
         )
         self.plot_button.configure(state="normal")
+        self.play_button.configure(state="normal")
         self.stop_button.configure(state="disabled")
         self.pause_button.configure(state="disabled")
         self.gif_running = False
+
+    def playRecording(self):
+        self.recorder.playRecording()
+        mb(title="Play Recording", message="Recording is playing")
+        self.gif_running = True
+        self.animateWave()
 
     def plot_Recording(self):
         mb(title="Plotted", message="Recording waveform plotted successfully.")
